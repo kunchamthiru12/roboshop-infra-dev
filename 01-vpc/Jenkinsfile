@@ -8,9 +8,13 @@ pipeline {
         GREETING = 'Hello Jenkins'
     }
     options{
-        timeout(time:1,unit:'HOURS')
-        disableConcurrentBuilds()
+        // timeout(time:1,unit:'HOURS')
+        // disableConcurrentBuilds()
          ansiColor('xterm')
+    }
+
+    parameter {
+          choice(name: 'action', choices: ['apply', 'destroy'], description: 'Pick something')
     }
     
 //build
@@ -34,6 +38,11 @@ pipeline {
             }
         }
         stage('Deploy') {
+            when {
+                expression {
+                    params.action =='apply'
+                }
+            }
             input {
                 message "Should we continue?"
                 ok "Yes, we should."
