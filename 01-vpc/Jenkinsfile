@@ -1,0 +1,71 @@
+pipeline {
+    agent {
+        node{
+            label 'AGENT-1'
+        }
+    }
+    
+    options{
+        timeout(time:1,unit:'HOURS')
+        disableConcurrentBuilds()
+    }
+    
+//build
+    stages {
+        stage('Init') {
+            steps {
+                sh """
+                    cd 01-vpc
+                    terraform init -reconfigure
+                """
+            }
+        }
+        stage('plan') {
+            steps {
+                sh """
+                     cd 01-vpc
+                     terraform plan
+                """     
+            }
+        }
+        stage('Deploy') {
+             input {
+                message "Should we continue?"
+                ok "Yes, we should."
+            steps {
+                sh"""
+                     cd 01-vpc
+                     terrform apply -auto-approve
+                """
+            }
+        }
+        stage('check params'){
+            steps{
+                sh """
+                    echo "Hello ${params.PERSON}"
+
+                    echo "Biography: ${params.BIOGRAPHY}"
+
+                    echo "Toggle: ${params.TOGGLE}"
+
+                    echo "Choice: ${params.CHOICE}"
+
+                    echo "Password: ${params.PASSWORD}"
+                """
+            }
+        }
+    }
+
+    //post build
+    post {
+        always{
+            echo 'I willalways say Hello again!'
+        }
+        failure{
+            echo 'this runs when pipeline is failed, used generally to send some alerts'
+        }
+        success{
+            echo ' i say Hello pipeline is successs'
+        }
+    }
+}
