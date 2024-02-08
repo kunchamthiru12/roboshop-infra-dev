@@ -4,7 +4,9 @@ pipeline {
             label 'AGENT-1'
         }
     }
-    
+    environment {
+        GREETING = 'Hello Jenkins'
+    }
     options{
         timeout(time:1,unit:'HOURS')
         disableConcurrentBuilds()
@@ -12,48 +14,42 @@ pipeline {
     
 //build
     stages {
-        stage('Init') {
+        stage('INIT') {
             steps {
                 sh """
                     cd 01-vpc
                     terraform init -reconfigure
-                """
+                   """ 
+
+                 
             }
         }
         stage('plan') {
             steps {
                 sh """
-                     cd 01-vpc
-                     terraform plan
-                """     
+                    cd 01-vpc
+                    terraform plan
+                   """ 
             }
         }
         stage('Deploy') {
-             input {
+            input {
                 message "Should we continue?"
                 ok "Yes, we should."
-            steps {
-                sh """
-                     cd 01-vpc
-                     terrform apply -auto-approve
-                  """
+                // submitter "alice,bob"
+                // parameters {
+                //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+                // }
             }
-        }
-        stage('check params'){
-            steps{
-                sh """
-                    echo "Hello ${params.PERSON}"
-
-                    echo "Biography: ${params.BIOGRAPHY}"
-
-                    echo "Toggle: ${params.TOGGLE}"
-
-                    echo "Choice: ${params.CHOICE}"
-
-                    echo "Password: ${params.PASSWORD}"
+            steps {
+                sh"""
+                   cd 01-vpc
+                    terraform apply -auto-approve
+                
                 """
             }
         }
+        
     }
 
     //post build
@@ -68,6 +64,5 @@ pipeline {
             echo ' i say Hello pipeline is successs'
         }
     }
-  }
 }
 
