@@ -68,4 +68,6 @@ pipeline {
             echo ' i say Hello pipeline is successs'
         }
     }
+  }
 }
+
