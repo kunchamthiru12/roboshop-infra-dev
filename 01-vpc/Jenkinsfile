@@ -1,5 +1,3 @@
-
-
 pipeline {
     agent {
         node {
@@ -67,13 +65,13 @@ pipeline {
                 //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
                 // }
             }
-            // steps {
-            //     sh """
-            //         cd 01-vpc
-            //         terraform destroy -auto-approve
-            //     """
-            // }
-        }
+        //     steps {
+        //         sh """
+        //             cd 01-vpc
+        //             terraform destroy -auto-approve
+        //         """
+        //     }
+        // }
     }
     // post build
     post { 
@@ -87,4 +85,4 @@ pipeline {
             echo 'I will say Hello when pipeline is success'
         }
     }
-}
+}    
