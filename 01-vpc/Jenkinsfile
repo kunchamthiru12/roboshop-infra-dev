@@ -53,12 +53,12 @@ pipeline {
                 """
             }
         }
-        stage('Destroy') {
-            when {
-                expression { 
-                    params.action == 'destroy'
-                }
-            }
+        // stage('Destroy') {
+        //     when {
+        //         expression { 
+        //             params.action == 'destroy'
+        //         }
+        //     }
             input {
                 message "Should we continue?"
                 ok "Yes, we should."
@@ -67,12 +67,12 @@ pipeline {
                 //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
                 // }
             }
-            steps {
-                sh """
-                    cd 01-vpc
-                    terraform destroy -auto-approve
-                """
-            }
+            // steps {
+            //     sh """
+            //         cd 01-vpc
+            //         terraform destroy -auto-approve
+            //     """
+            // }
         }
     }
     // post build
